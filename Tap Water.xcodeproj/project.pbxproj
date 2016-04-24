@@ -9,21 +9,49 @@
 /* Begin PBXBuildFile section */
 		EC527A521C1BBA63007A49CC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC527A511C1BBA63007A49CC /* AppDelegate.swift */; };
 		EC527A541C1BBA63007A49CC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC527A531C1BBA63007A49CC /* ViewController.swift */; };
-		EC527A571C1BBA63007A49CC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EC527A551C1BBA63007A49CC /* Main.storyboard */; };
 		EC527A5A1C1BBA63007A49CC /* Tap_Water.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EC527A581C1BBA63007A49CC /* Tap_Water.xcdatamodeld */; };
 		EC527A5C1C1BBA63007A49CC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EC527A5B1C1BBA63007A49CC /* Assets.xcassets */; };
 		EC527A5F1C1BBA63007A49CC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EC527A5D1C1BBA63007A49CC /* LaunchScreen.storyboard */; };
+		EC527A671C1BBAA9007A49CC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC527A661C1BBAA9007A49CC /* QuartzCore.framework */; };
+		EC527A6E1C1BBACF007A49CC /* GraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC527A691C1BBACF007A49CC /* GraphView.swift */; };
+		EC527A6F1C1BBACF007A49CC /* Day.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC527A6A1C1BBACF007A49CC /* Day.swift */; };
+		EC527A701C1BBACF007A49CC /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC527A6B1C1BBACF007A49CC /* Constants.swift */; };
+		EC527A711C1BBACF007A49CC /* CoreDataHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC527A6C1C1BBACF007A49CC /* CoreDataHelper.swift */; };
+		EC527A721C1BBACF007A49CC /* CustomNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC527A6D1C1BBACF007A49CC /* CustomNavigationBar.swift */; };
+		EC527A761C1BBB94007A49CC /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC527A731C1BBB94007A49CC /* SettingsViewController.swift */; };
+		EC527A771C1BBB94007A49CC /* NotificationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC527A741C1BBB94007A49CC /* NotificationsViewController.swift */; };
+		EC527A781C1BBB94007A49CC /* StatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC527A751C1BBB94007A49CC /* StatsViewController.swift */; };
+		EC527A7A1C1BBBBE007A49CC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EC527A791C1BBBBE007A49CC /* Main.storyboard */; };
+		EC527A831C1BBCEA007A49CC /* OnBoardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC527A7C1C1BBCE9007A49CC /* OnBoardingViewController.swift */; };
+		EC527A841C1BBCEA007A49CC /* OnBoardingWelcomeView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EC527A7D1C1BBCE9007A49CC /* OnBoardingWelcomeView.xib */; };
+		EC527A851C1BBCEA007A49CC /* OnBoardingWelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC527A7E1C1BBCEA007A49CC /* OnBoardingWelcomeView.swift */; };
+		EC527A861C1BBCEA007A49CC /* OnBoardingPhoneView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EC527A7F1C1BBCEA007A49CC /* OnBoardingPhoneView.xib */; };
+		EC527A871C1BBCEA007A49CC /* OnBoardingPhoneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC527A801C1BBCEA007A49CC /* OnBoardingPhoneView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		EC527A4E1C1BBA63007A49CC /* Tap Water.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Tap Water.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EC527A511C1BBA63007A49CC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EC527A531C1BBA63007A49CC /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		EC527A561C1BBA63007A49CC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		EC527A591C1BBA63007A49CC /* Tap_Water.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Tap_Water.xcdatamodel; sourceTree = "<group>"; };
 		EC527A5B1C1BBA63007A49CC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		EC527A5E1C1BBA63007A49CC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		EC527A601C1BBA63007A49CC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EC527A661C1BBAA9007A49CC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		EC527A691C1BBACF007A49CC /* GraphView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphView.swift; sourceTree = "<group>"; };
+		EC527A6A1C1BBACF007A49CC /* Day.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Day.swift; sourceTree = "<group>"; };
+		EC527A6B1C1BBACF007A49CC /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		EC527A6C1C1BBACF007A49CC /* CoreDataHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataHelper.swift; sourceTree = "<group>"; };
+		EC527A6D1C1BBACF007A49CC /* CustomNavigationBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomNavigationBar.swift; sourceTree = "<group>"; };
+		EC527A731C1BBB94007A49CC /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		EC527A741C1BBB94007A49CC /* NotificationsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationsViewController.swift; sourceTree = "<group>"; };
+		EC527A751C1BBB94007A49CC /* StatsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatsViewController.swift; sourceTree = "<group>"; };
+		EC527A791C1BBBBE007A49CC /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		EC527A7C1C1BBCE9007A49CC /* OnBoardingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnBoardingViewController.swift; sourceTree = "<group>"; };
+		EC527A7D1C1BBCE9007A49CC /* OnBoardingWelcomeView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OnBoardingWelcomeView.xib; sourceTree = "<group>"; };
+		EC527A7E1C1BBCEA007A49CC /* OnBoardingWelcomeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnBoardingWelcomeView.swift; sourceTree = "<group>"; };
+		EC527A7F1C1BBCEA007A49CC /* OnBoardingPhoneView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OnBoardingPhoneView.xib; sourceTree = "<group>"; };
+		EC527A801C1BBCEA007A49CC /* OnBoardingPhoneView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnBoardingPhoneView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,6 +59,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EC527A671C1BBAA9007A49CC /* QuartzCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -40,6 +69,7 @@
 		EC527A451C1BBA63007A49CC = {
 			isa = PBXGroup;
 			children = (
+				EC527A661C1BBAA9007A49CC /* QuartzCore.framework */,
 				EC527A501C1BBA63007A49CC /* Tap Water */,
 				EC527A4F1C1BBA63007A49CC /* Products */,
 			);
@@ -56,15 +86,44 @@
 		EC527A501C1BBA63007A49CC /* Tap Water */ = {
 			isa = PBXGroup;
 			children = (
+				EC527A7B1C1BBCDD007A49CC /* On Boarding */,
+				EC527A681C1BBABB007A49CC /* Helpers */,
 				EC527A511C1BBA63007A49CC /* AppDelegate.swift */,
 				EC527A531C1BBA63007A49CC /* ViewController.swift */,
-				EC527A551C1BBA63007A49CC /* Main.storyboard */,
+				EC527A731C1BBB94007A49CC /* SettingsViewController.swift */,
+				EC527A741C1BBB94007A49CC /* NotificationsViewController.swift */,
+				EC527A751C1BBB94007A49CC /* StatsViewController.swift */,
+				EC527A791C1BBBBE007A49CC /* Main.storyboard */,
 				EC527A5B1C1BBA63007A49CC /* Assets.xcassets */,
 				EC527A5D1C1BBA63007A49CC /* LaunchScreen.storyboard */,
 				EC527A601C1BBA63007A49CC /* Info.plist */,
 				EC527A581C1BBA63007A49CC /* Tap_Water.xcdatamodeld */,
 			);
 			path = "Tap Water";
+			sourceTree = "<group>";
+		};
+		EC527A681C1BBABB007A49CC /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				EC527A691C1BBACF007A49CC /* GraphView.swift */,
+				EC527A6A1C1BBACF007A49CC /* Day.swift */,
+				EC527A6B1C1BBACF007A49CC /* Constants.swift */,
+				EC527A6C1C1BBACF007A49CC /* CoreDataHelper.swift */,
+				EC527A6D1C1BBACF007A49CC /* CustomNavigationBar.swift */,
+			);
+			name = Helpers;
+			sourceTree = "<group>";
+		};
+		EC527A7B1C1BBCDD007A49CC /* On Boarding */ = {
+			isa = PBXGroup;
+			children = (
+				EC527A7C1C1BBCE9007A49CC /* OnBoardingViewController.swift */,
+				EC527A7D1C1BBCE9007A49CC /* OnBoardingWelcomeView.xib */,
+				EC527A7E1C1BBCEA007A49CC /* OnBoardingWelcomeView.swift */,
+				EC527A7F1C1BBCEA007A49CC /* OnBoardingPhoneView.xib */,
+				EC527A801C1BBCEA007A49CC /* OnBoardingPhoneView.swift */,
+			);
+			name = "On Boarding";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -99,6 +158,7 @@
 				TargetAttributes = {
 					EC527A4D1C1BBA63007A49CC = {
 						CreatedOnToolsVersion = 7.2;
+						DevelopmentTeam = MCP6C8783X;
 					};
 				};
 			};
@@ -125,9 +185,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EC527A861C1BBCEA007A49CC /* OnBoardingPhoneView.xib in Resources */,
+				EC527A841C1BBCEA007A49CC /* OnBoardingWelcomeView.xib in Resources */,
+				EC527A7A1C1BBBBE007A49CC /* Main.storyboard in Resources */,
 				EC527A5F1C1BBA63007A49CC /* LaunchScreen.storyboard in Resources */,
 				EC527A5C1C1BBA63007A49CC /* Assets.xcassets in Resources */,
-				EC527A571C1BBA63007A49CC /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -139,22 +201,25 @@
 			buildActionMask = 2147483647;
 			files = (
 				EC527A541C1BBA63007A49CC /* ViewController.swift in Sources */,
+				EC527A781C1BBB94007A49CC /* StatsViewController.swift in Sources */,
 				EC527A521C1BBA63007A49CC /* AppDelegate.swift in Sources */,
+				EC527A831C1BBCEA007A49CC /* OnBoardingViewController.swift in Sources */,
 				EC527A5A1C1BBA63007A49CC /* Tap_Water.xcdatamodeld in Sources */,
+				EC527A711C1BBACF007A49CC /* CoreDataHelper.swift in Sources */,
+				EC527A721C1BBACF007A49CC /* CustomNavigationBar.swift in Sources */,
+				EC527A771C1BBB94007A49CC /* NotificationsViewController.swift in Sources */,
+				EC527A6F1C1BBACF007A49CC /* Day.swift in Sources */,
+				EC527A6E1C1BBACF007A49CC /* GraphView.swift in Sources */,
+				EC527A851C1BBCEA007A49CC /* OnBoardingWelcomeView.swift in Sources */,
+				EC527A701C1BBACF007A49CC /* Constants.swift in Sources */,
+				EC527A761C1BBB94007A49CC /* SettingsViewController.swift in Sources */,
+				EC527A871C1BBCEA007A49CC /* OnBoardingPhoneView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		EC527A551C1BBA63007A49CC /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				EC527A561C1BBA63007A49CC /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		EC527A5D1C1BBA63007A49CC /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -251,7 +316,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = "Tap Water/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "BOL.Tap-Water";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -262,7 +329,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = "Tap Water/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "BOL.Tap-Water";
 				PRODUCT_NAME = "$(TARGET_NAME)";

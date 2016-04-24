@@ -1,4 +1,39 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model name="Test1.xcdatamodel" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1" systemVersion="11A491" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
-    <elements/>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9525" systemVersion="15B42" minimumToolsVersion="Automatic">
+    <entity name="AutoReset" syncable="YES">
+        <attribute name="reset" optional="YES" attributeType="Boolean" syncable="YES"/>
+    </entity>
+    <entity name="CurrentAverage" syncable="YES">
+        <attribute name="average" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+    </entity>
+    <entity name="Day" syncable="YES">
+        <attribute name="ouncesPerGlass" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="todaysDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="totalGlassesDrank" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="totalGlassesGoal" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+    </entity>
+    <entity name="Notification" syncable="YES">
+        <attribute name="notify" optional="YES" attributeType="Boolean" syncable="YES"/>
+    </entity>
+    <entity name="Notifications" syncable="YES">
+        <attribute name="hour" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+    </entity>
+    <entity name="OnBoard" syncable="YES">
+        <attribute name="hasSeen" optional="YES" attributeType="Boolean" syncable="YES"/>
+    </entity>
+    <entity name="PastDays" syncable="YES">
+        <attribute name="ouncesPerGlass" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="todaysDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="totalGlassesDrank" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="totalGlassesGoal" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="AutoReset" positionX="-63" positionY="-18" width="128" height="60"/>
+        <element name="CurrentAverage" positionX="-54" positionY="0" width="128" height="60"/>
+        <element name="Day" positionX="-36" positionY="18" width="128" height="105"/>
+        <element name="Notification" positionX="-18" positionY="54" width="128" height="60"/>
+        <element name="Notifications" positionX="0" positionY="63" width="128" height="60"/>
+        <element name="OnBoard" positionX="18" positionY="72" width="128" height="60"/>
+        <element name="PastDays" positionX="36" positionY="90" width="128" height="105"/>
+    </elements>
 </model>

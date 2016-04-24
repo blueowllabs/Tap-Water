@@ -1,0 +1,23 @@
+{
+  "images" : [
+    {
+      "idiom" : "universal",
+      "filename" : "Simulator Screen Shot Dec 11, 2015, 7.47.48 PM_iphone6plus_spacegrey_portrait.png",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "universal",
+      "filename" : "Simulator Screen Shot Dec 11, 2015, 7.47.48 PM_iphone6plus_spacegrey_portrait-1.png",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "universal",
+      "filename" : "Simulator Screen Shot Dec 11, 2015, 7.47.48 PM_iphone6plus_spacegrey_portrait-2.png",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "version" : 1,
+    "author" : "xcode"
+  }
+}
