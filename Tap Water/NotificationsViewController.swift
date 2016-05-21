@@ -14,20 +14,23 @@ func calculateNotificationTimes(dailyGlassGoal: Int) -> NSMutableArray {
     let numberToSchedule = dailyGlassGoal
     let notificationTimes: NSMutableArray = []
     let offset = numberToSchedule > 7 ? 1 : 2
-    var startTime = 8
+    
+    var fireDate = NSCalendar.currentCalendar()
+        .dateBySettingHour(8, minute: 0, second: 0, ofDate: NSDate(), options: [])
     
     for _ in 0..<numberToSchedule {
-        notificationTimes.addObject(startTime)
-        startTime = startTime + offset
+        notificationTimes.addObject(fireDate!)
+        fireDate = NSCalendar.currentCalendar()
+            .dateByAddingUnit(.Hour, value: offset, toDate: fireDate!, options: [])
     }
     
     return notificationTimes
 }
 
-class NotificationsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
+class NotificationsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     var day: Day!
-    var hours: NSMutableArray = []
-    var hourStrings: NSMutableArray = []
+    var times: NSMutableArray = []
+    var timeStrings: NSMutableArray = []
     var shadowView: UIView!
     var infoView: UIView!
     var pickerHours: NSMutableArray = []
@@ -51,7 +54,7 @@ class NotificationsViewController: UIViewController, UITableViewDataSource, UITa
             image: UIImage(named: "back"),
             style: .Plain,
             target: self,
-            action: "goBack")
+            action: #selector(NotificationsViewController.goBack))
         
         navigationItem.leftBarButtonItem = backbutton
         
@@ -69,24 +72,9 @@ class NotificationsViewController: UIViewController, UITableViewDataSource, UITa
             navigationItem.rightBarButtonItem = nil
         }
 
-        enableSwitch.addTarget(self, action: Selector("stateChanged:"), forControlEvents: UIControlEvents.ValueChanged)
+        enableSwitch.addTarget(self, action: #selector(NotificationsViewController.stateChanged(_:)),
+                               forControlEvents: UIControlEvents.ValueChanged)
         notificationTableView.separatorColor = UIColor.clearColor()
-        
-        for index in 1...12 {
-            pickerHours.addObject(index)
-        }
-        
-        for index in 0..<60 {
-            pickerMinutes.addObject(index)
-        }
-        
-        for index in 0..<2 {
-            if index == 0 {
-                pickerTime.addObject("AM")
-            } else {
-                pickerTime.addObject("PM")
-            }
-        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -99,16 +87,15 @@ class NotificationsViewController: UIViewController, UITableViewDataSource, UITa
     }
     
     func configureNotifications() {
-        hours = GetNotifications(calculateNotificationTimes(day.totalGlassesGoal))
+        times = GetNotifications(calculateNotificationTimes(day.totalGlassesGoal))
         
-        for index in 0..<hours.count {
-            var hour = hours[index] as! Int
-            if hour > 12 {
-                hour = hour - 12
-                hourStrings.addObject(NSString(format: "%i pm", hour))
-            } else {
-                hourStrings.addObject(NSString(format: "%i am", hour))
-            }
+        for index in 0..<times.count {
+            let time = times[index]
+            let formatter = NSDateFormatter()
+            formatter.timeStyle = .ShortStyle
+            
+            let dateString = formatter.stringFromDate(time as! NSDate)
+            timeStrings.addObject(dateString)
         }
     }
     
@@ -134,139 +121,13 @@ class NotificationsViewController: UIViewController, UITableViewDataSource, UITa
             image: UIImage(named: "add"),
             style: .Plain,
             target: self,
-            action: "addNotification")
+            action: #selector(NotificationsViewController.addNotification))
         
         navigationItem.rightBarButtonItem = addbutton
     }
     
     func addNotification() {
         createDatePickerViewWithAlertController()
-        //buildPopUp("Add Notification")
-    }
-    
-    func buildPopUp(title: NSString) {
-        shadowView = UIView (frame: view.frame)
-        shadowView.backgroundColor = UIColor.blackColor()
-        shadowView.alpha = 0
-        view.addSubview(shadowView)
-        
-        let width = UIScreen.mainScreen().bounds.width / 2 + UIScreen.mainScreen().bounds.width / 4
-        let labelText: NSString = title
-        let lableHeight = labelText.boundingRectWithSize(CGSize(width: width, height: CGFloat.max),
-            options: NSStringDrawingOptions.UsesLineFragmentOrigin,
-            attributes: [NSFontAttributeName: UIFont(name: "AvenirNext-regular", size: 20)!],
-            context: nil)
-        
-        let closeButton = UIButton(frame: CGRectMake(0, 10, width, lableHeight.height))
-        closeButton.tag = 1
-        closeButton.setTitle("Cancel", forState: .Normal)
-        closeButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
-        closeButton.titleLabel?.font = UIFont(name: "AvenirNext-regular", size: 20)
-        closeButton.addTarget(self, action: "dismissInfo:", forControlEvents: .TouchUpInside)
-
-        let picker = UIPickerView(frame: CGRectMake(0, 10 + closeButton.frame.height, width, 150))
-        picker.delegate = self
-        picker.dataSource = self
-        
-        let addButton = UIButton (frame: CGRectMake(0, 10 + picker.frame.height + closeButton.frame.height, width, lableHeight.height))
-        addButton.tag = 0
-        addButton.setTitle(title as String, forState: .Normal)
-        addButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
-        addButton.titleLabel?.font = UIFont(name: "AvenirNext-regular", size: 20)
-        addButton.addTarget(self, action: "dismissInfo:", forControlEvents: .TouchUpInside)
-        
-        infoView = UIView (frame: CGRectMake(
-            UIScreen.mainScreen().bounds.width / 8,
-            UIScreen.mainScreen().bounds.height,
-            width,
-            picker.frame.height + addButton.frame.height + closeButton.frame.height))
-        
-        infoView.backgroundColor = UIColor.whiteColor()
-        infoView.layer.cornerRadius = 10
-        view.addSubview(infoView)
-        
-        infoView.addSubview(picker)
-        infoView.addSubview(addButton)
-        infoView.addSubview(closeButton)
-        
-        UIView.animateWithDuration(0.2, animations: {
-            self.shadowView.alpha = 0.3
-        })
-        
-        UIView.animateWithDuration(0.3, animations: {
-            self.infoView.frame.origin.y -= (UIScreen.mainScreen().bounds.height / 2 + self.infoView.frame.height / 2)
-        })
-    }
-    
-    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
-        return 3
-    }
-    
-    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        if component == 0 {
-            return pickerHours.count
-        } else if component == 1 {
-            return pickerMinutes.count
-        }
-        return pickerTime.count
-    }
-    
-    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        if component == 0 {
-            return NSString(format: "%i", pickerHours[row] as! Int) as String
-        } else if component == 1 {
-            let minutes = pickerMinutes[row] as! Int
-            if minutes < 10 {
-                return NSString(format: "0%i", pickerMinutes[row] as! Int) as String
-            } else {
-                return NSString(format: "%i", pickerMinutes[row] as! Int) as String
-            }
-        }
-        return pickerTime[row] as? String
-    }
-    
-    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        if component == 0 {
-            tempHour = pickerHours[row] as! Int
-        } else if component == 1 {
-            tempMinute = pickerMinutes[row] as! Int
-        } else {
-            tempTime = pickerTime[row] as! String
-        }
-    }
-    
-    func dismissInfo(sender: UIButton) {
-        if sender.tag != 1 {
-            if tempTime == "AM" {
-                hours.addObject(tempHour)
-            } else {
-                tempHour = tempHour + 12
-                hours.addObject(tempHour)
-            }
-            
-            SaveNotifications(hours)
-            ScheduleNotifications(true)
-            
-            hours.removeAllObjects()
-            hourStrings.removeAllObjects()
-            
-            configureNotifications()
-            notificationTableView.reloadData()
-        }
-        
-        UIView.animateWithDuration(0.2, animations: {
-            self.shadowView.alpha = 0
-            }, completion: {
-                (value: Bool) in
-                self.shadowView.removeFromSuperview()
-        })
-        
-        UIView.animateWithDuration(0.3, animations: {
-            self.infoView.frame.origin.y += (UIScreen.mainScreen().bounds.height / 2 + self.infoView.frame.height / 2)
-            }, completion: {
-                (value: Bool) in
-                self.infoView.removeFromSuperview()
-        })
     }
     
     // MARK: - Tableview Data Source
@@ -276,7 +137,7 @@ class NotificationsViewController: UIViewController, UITableViewDataSource, UITa
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return hourStrings.count
+        return timeStrings.count
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -285,7 +146,7 @@ class NotificationsViewController: UIViewController, UITableViewDataSource, UITa
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = notificationTableView.dequeueReusableCellWithIdentifier(NotiticationCellId) as UITableViewCell!
-        cell.textLabel?.text = hourStrings[indexPath.row] as? String
+        cell.textLabel?.text = timeStrings[indexPath.row] as? String
         cell.textLabel?.font = UIFont(name: "AvenirNext-regular", size: 20)!
         cell.textLabel?.textAlignment = .Center
         cell.selectionStyle = .None
@@ -298,14 +159,12 @@ class NotificationsViewController: UIViewController, UITableViewDataSource, UITa
     
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == UITableViewCellEditingStyle.Delete {
-            hours.removeObjectAtIndex(indexPath.row)
-            hourStrings.removeObjectAtIndex(indexPath.row)
-            SaveNotifications(hours)
+            times.removeObjectAtIndex(indexPath.row)
+            timeStrings.removeObjectAtIndex(indexPath.row)
+            SaveNotifications(times)
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
         }
     }
-    
-    // test
     
     func createDatePickerViewWithAlertController()
     {
@@ -316,7 +175,7 @@ class NotificationsViewController: UIViewController, UITableViewDataSource, UITa
         
         self.datePicker = UIDatePicker(frame: CGRectMake(0, 0, viewDatePicker.frame.size.width - 20, 200))
         self.datePicker.datePickerMode = UIDatePickerMode.Time
-        self.datePicker.addTarget(self, action: "datePickerSelected", forControlEvents: UIControlEvents.ValueChanged)
+        self.datePicker.addTarget(self, action: #selector(NotificationsViewController.datePickerSelected), forControlEvents: UIControlEvents.ValueChanged)
         
         viewDatePicker.addSubview(self.datePicker)
         
@@ -330,5 +189,10 @@ class NotificationsViewController: UIViewController, UITableViewDataSource, UITa
         alertController.addAction(cancelAction)
         
         self.presentViewController(alertController, animated: true) { (action) in }
+    }
+    
+    func datePickerSelected()
+    {
+        
     }
 }

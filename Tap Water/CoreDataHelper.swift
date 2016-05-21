@@ -326,7 +326,7 @@ func SaveNotifications(notifications: NSArray) {
             
             for note in 0..<notifications.count {
                 let notificationObject = NSManagedObject(entity: entity!, insertIntoManagedObjectContext:managedContext)
-                notificationObject.setValue(notifications[note], forKey: "hour")
+                notificationObject.setValue(notifications[note], forKey: "date")
                 
                 do {
                     try managedContext!.save()
@@ -340,7 +340,7 @@ func SaveNotifications(notifications: NSArray) {
         
         for note in 0..<notifications.count {
             let notificationObject = NSManagedObject(entity: entity!, insertIntoManagedObjectContext:managedContext)
-            notificationObject.setValue(notifications[note], forKey: "hour")
+            notificationObject.setValue(notifications[note], forKey: "date")
             
             do {
                 try managedContext!.save()
@@ -348,7 +348,7 @@ func SaveNotifications(notifications: NSArray) {
                 print("Could not save \(error1), \(error1.userInfo)")
             }
         }
-    }
+    }    
 }
 
 func GetNotifications(hours: NSMutableArray) -> NSMutableArray {
@@ -362,7 +362,7 @@ func GetNotifications(hours: NSMutableArray) -> NSMutableArray {
             hours.removeAllObjects()
             
             for current in 0..<results.count {
-                hours.addObject(results[current].valueForKey("hour") as! Int)
+                hours.addObject(results[current].valueForKey("date") as! NSDate)
             }
         }
     } else {
@@ -376,13 +376,17 @@ func ScheduleNotifications(value: Bool) {
     UIApplication.sharedApplication().cancelAllLocalNotifications()
     
     if value {
-        let hours = GetNotifications([])
+        let dates = GetNotifications([])
         
-        for (var i=0; i<hours.count; i++) {
-            let date = NSCalendar.currentCalendar().dateBySettingHour(hours[i] as! Int, minute: 0, second: 0, ofDate: NSDate(), options: [])
+        for i in 0 ..< dates.count {
+            let currentDate = NSDate()
+            let date = dates[i]
+            let comp = NSCalendar.currentCalendar().components([.Hour, .Minute, .Second], fromDate: date as! NSDate)
+            let fireDate = NSCalendar.currentCalendar()
+                .dateBySettingHour(comp.hour, minute: comp.minute, second: comp.second, ofDate: currentDate, options: [])
             let localNotification = UILocalNotification()
             
-            localNotification.fireDate = date
+            localNotification.fireDate = fireDate
             localNotification.alertBody = "Time to drink some water!"
             localNotification.timeZone = NSTimeZone.defaultTimeZone()
             localNotification.repeatInterval = NSCalendarUnit.Day
