@@ -24,7 +24,7 @@ class ViewController: UIViewController {
         
         if !hasSeenOnBoarding() {
             initialView = UIView(frame: view.frame)
-            initialView.backgroundColor = UIColor.whiteColor()
+            initialView.backgroundColor = UIColor.white
             navigationController!.view.addSubview(initialView)
         }
         
@@ -32,20 +32,20 @@ class ViewController: UIViewController {
         ApplyTapGesture()
     }
     
-    override func viewDidAppear(animated: Bool) {
-        NSNotificationCenter.defaultCenter().addObserver(
+    override func viewDidAppear(_ animated: Bool) {
+        NotificationCenter.default.addObserver(
             self,
-            selector: "refreshView",
-            name: UIApplicationDidBecomeActiveNotification,
+            selector: #selector(ViewController.refreshView),
+            name: NSNotification.Name.UIApplicationDidBecomeActive,
             object: nil)
         
         refreshView()
     }
     
-    override func viewDidDisappear(animated: Bool) {
-        NSNotificationCenter.defaultCenter().removeObserver(
+    override func viewDidDisappear(_ animated: Bool) {
+        NotificationCenter.default.removeObserver(
             self,
-            name: UIApplicationDidBecomeActiveNotification,
+            name: NSNotification.Name.UIApplicationDidBecomeActive,
             object: nil)
         
         if waterView != nil {
@@ -68,7 +68,7 @@ class ViewController: UIViewController {
     
     func refreshView() {
         if !hasSeenOnBoarding() {
-            performSegueWithIdentifier("showOnBoarding", sender: self)
+            performSegue(withIdentifier: "showOnBoarding", sender: self)
         } else {
             if waterView != nil {
                 waterView.removeFromSuperview()
@@ -92,22 +92,22 @@ class ViewController: UIViewController {
     }
     
     func ApplyTransparentNavigationBar() {
-        navigationController?.navigationBar.setBackgroundImage(UIImage(), forBarMetrics: UIBarMetrics.Default)
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         navigationController?.navigationBar.shadowImage = UIImage()
-        navigationController?.navigationBar.translucent = true
-        navigationController?.view.backgroundColor = .clearColor()
-        navigationController?.navigationBar.backgroundColor = .clearColor()
+        navigationController?.navigationBar.isTranslucent = true
+        navigationController?.view.backgroundColor = .clear
+        navigationController?.navigationBar.backgroundColor = .clear
         
-        navigationController?.navigationBar.tintColor = .blackColor()
+        navigationController?.navigationBar.tintColor = .black
         navigationController?.navigationBar.titleTextAttributes = [
             NSFontAttributeName: UIFont(name: "AvenirNext-regular", size: 24)!,
-            NSForegroundColorAttributeName: UIColor.blackColor()
+            NSForegroundColorAttributeName: UIColor.black
         ]
     }
     
     func ApplyTapGesture() {
-        let tap = UITapGestureRecognizer(target: self, action: "AddWater")
-        goalGlass.userInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(ViewController.AddWater))
+        goalGlass.isUserInteractionEnabled = true
         goalGlass.addGestureRecognizer(tap)
     }
     
@@ -117,45 +117,45 @@ class ViewController: UIViewController {
     
     func SetupHelperView() {
         helper = UIView(
-            frame: CGRectMake(
-                0,
-                goalGlass.bounds.height + goalGlass.frame.origin.y,
-                view.frame.width,
-                goalGlass.bounds.height
+            frame: CGRect(
+                x: 0,
+                y: goalGlass.bounds.height + goalGlass.frame.origin.y,
+                width: view.frame.width,
+                height: goalGlass.bounds.height
             ))
         
-        helper.backgroundColor = .whiteColor()
+        helper.backgroundColor = .white
         view.addSubview(helper)
-        view.bringSubviewToFront(goalHeaderLabel)
-        view.bringSubviewToFront(goalLabel)
+        view.bringSubview(toFront: goalHeaderLabel)
+        view.bringSubview(toFront: goalLabel)
     }
     
     func SetupWaterView() {
         waterView = UIView(
-            frame: CGRectMake(
-                goalGlass.frame.origin.x,
-                goalGlass.bounds.height + goalGlass.frame.origin.y,
-                goalGlass.bounds.width,
-                goalGlass.bounds.height))
+            frame: CGRect(
+                x: goalGlass.frame.origin.x,
+                y: goalGlass.bounds.height + goalGlass.frame.origin.y,
+                width: goalGlass.bounds.width,
+                height: goalGlass.bounds.height))
         waterView.backgroundColor = UIColorFromHex(0x1EA8FC)
         waterView.tag = 1
         
         view.addSubview(waterView)
-        view.sendSubviewToBack(waterView)
+        view.sendSubview(toBack: waterView)
     }
     
     func AddWater() {
         if day.totalGlassesDrank >= day.totalGlassesGoal+5 {
-            let alert = UIAlertController(title: "", message: "Whoa... That's a little too much water.", preferredStyle: .Alert)
-            let OKAction = UIAlertAction(title: "Okay", style: .Default) { (action) in }
+            let alert = UIAlertController(title: "", message: "Whoa... That's a little too much water.", preferredStyle: .alert)
+            let OKAction = UIAlertAction(title: "Okay", style: .default) { (action) in }
             alert.addAction(OKAction)
-            self.presentViewController(alert, animated: true) { }
+            self.present(alert, animated: true) { }
         } else {
             AddWaterToTotal(1)
         }
     }
     
-    func AddWaterToTotal(amount: Int) {
+    func AddWaterToTotal(_ amount: Int) {
         day.totalGlassesDrank! += amount
         UpdateCurrentDay(day)
         GetDayFromCoreData()
@@ -170,14 +170,14 @@ class ViewController: UIViewController {
         goalLabel.text = NSString(format: "%i / %i Glasses", day.totalGlassesDrank, day.totalGlassesGoal) as String
     }
     
-    func AnimateWater(amount: Int) {
+    func AnimateWater(_ amount: Int) {
         let glassHeight = goalGlass.frame.height
         let numberOfPoints = day.totalGlassesGoal
-        let heightOfSingleGlass = glassHeight / CGFloat(numberOfPoints)
+        let heightOfSingleGlass = glassHeight / CGFloat(numberOfPoints!)
         let waterHeight: CGFloat = CGFloat(heightOfSingleGlass * CGFloat(amount))
         
         if day.totalGlassesDrank != 0 {
-            UIView.animateWithDuration(1.0, animations: {
+            UIView.animate(withDuration: 1.0, animations: {
                 self.waterView.frame.origin.y -= waterHeight
             })
         } else {
@@ -191,14 +191,14 @@ class ViewController: UIViewController {
     }
     
     @IBAction func SettingsButtonPressed() {
-        self.performSegueWithIdentifier("settings", sender: self)
+        self.performSegue(withIdentifier: "settings", sender: self)
     }
     
     // MARK: - Navigation
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "settings" {
-            let settingsVC = segue.destinationViewController as! SettingsViewController
+            let settingsVC = segue.destination as! SettingsViewController
             
             settingsVC.day = day
         }

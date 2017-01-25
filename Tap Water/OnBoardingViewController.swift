@@ -15,8 +15,8 @@ let BODY_FONT_SIZE: CGFloat = 18
 class OnBoardingViewController: UIViewController {
     @IBOutlet weak var pageDots: UIPageControl!
 
-    let bodyTextValues = ["Simply tap on your daily glass to add a single glass of water to it.",
-        "Setup the number of glasses to drink per day and the number of ounces per glass.",
+    let bodyTextValues = ["Tap on your daily glass to add a single glass of water to it.",
+        "Configure the number of glasses to drink per day and the number of ounces per glass.",
         "Recieve daily notificaitons to drink a glass of water. Use the default times or customize your own.",
         "Application badges will indicate how many glasses of water are left to reach your daily goal."]
         
@@ -27,7 +27,7 @@ class OnBoardingViewController: UIViewController {
         welcomeViewConfig()
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
         animateWelcomeView()
@@ -52,57 +52,57 @@ class OnBoardingViewController: UIViewController {
         welcomeView.frame = view.frame
         welcomeView.alpha = 0
         
-        let goalGlass = UIImageView(frame: CGRectMake((view.frame.width / 2) - (243 / 2),
-            welcomeView.title.frame.origin.y + welcomeView.title.frame.height + 120 + 44 /*new label height*/, 243, 206))
+        let goalGlass = UIImageView(frame: CGRect(x: (view.frame.width / 2) - (243 / 2),
+            y: welcomeView.title.frame.origin.y + welcomeView.title.frame.height + 120 + 44 /*new label height*/, width: 243, height: 206))
         goalGlass.image = UIImage(named: "goalGlass")
         welcomeView.addSubview(goalGlass)
         
         let helper = UIView(
-            frame: CGRectMake(
-                0,
-                goalGlass.bounds.height + goalGlass.frame.origin.y,
-                view.frame.width,
-                goalGlass.bounds.height
+            frame: CGRect(
+                x: 0,
+                y: goalGlass.bounds.height + goalGlass.frame.origin.y,
+                width: view.frame.width,
+                height: goalGlass.bounds.height
             ))
         
-        helper.backgroundColor = .whiteColor()
+        helper.backgroundColor = .white
         welcomeView.addSubview(helper)
         
         waterViewWelcome = UIView(
-            frame: CGRectMake(
-                (view.frame.width / 2) - (goalGlass.bounds.width / 2),
-                goalGlass.bounds.height + goalGlass.frame.origin.y,
-                goalGlass.bounds.width,
-                goalGlass.bounds.height))
+            frame: CGRect(
+                x: (view.frame.width / 2) - (goalGlass.bounds.width / 2),
+                y: goalGlass.bounds.height + goalGlass.frame.origin.y,
+                width: goalGlass.bounds.width,
+                height: goalGlass.bounds.height))
         waterViewWelcome.backgroundColor = UIColorFromHex(0x1EA8FC)
         
         welcomeView.addSubview(waterViewWelcome)
-        welcomeView.sendSubviewToBack(waterViewWelcome)
+        welcomeView.sendSubview(toBack: waterViewWelcome)
         
-        let leftSwipe = UISwipeGestureRecognizer(target: self, action: "leftWelcomeSwipe:")
-        leftSwipe.direction = .Left
+        let leftSwipe = UISwipeGestureRecognizer(target: self, action: #selector(OnBoardingViewController.leftWelcomeSwipe(_:)))
+        leftSwipe.direction = .left
         welcomeView.addGestureRecognizer(leftSwipe)
         
         view.addSubview(welcomeView)
-        view.bringSubviewToFront(pageDots)
+        view.bringSubview(toFront: pageDots)
     }
     
     func animateWelcomeView() {
-        UIView.animateWithDuration(0.4, delay: 0, options: [], animations: {
+        UIView.animate(withDuration: 0.4, delay: 0, options: [], animations: {
             self.welcomeView.alpha = 1
             }, completion: {
                 (value: Bool) in
                 
-                UIView.animateWithDuration(1.0, delay: 0, options: [], animations: {
+                UIView.animate(withDuration: 1.0, delay: 0, options: [], animations: {
                     self.waterViewWelcome.frame.origin.y -= self.waterViewWelcome.frame.height / 2
                     }, completion: nil )
         })
     }
     
-    func leftWelcomeSwipe(sender: UISwipeGestureRecognizer) {
+    func leftWelcomeSwipe(_ sender: UISwipeGestureRecognizer) {
         self.view.layer.removeAllAnimations()
         
-        UIView.animateWithDuration(0.4, delay: 0, options: [], animations: {
+        UIView.animate(withDuration: 0.4, delay: 0, options: [], animations: {
             self.welcomeView.frame.origin.x -= self.welcomeView.frame.width
             }, completion: {
                 (value: Bool) in
@@ -111,7 +111,7 @@ class OnBoardingViewController: UIViewController {
                 self.welcomeView.removeFromSuperview()
                 self.tapViewConfig()
                 
-                UIView.animateWithDuration(0.4, delay: 0, options: [], animations: {
+                UIView.animate(withDuration: 0.4, delay: 0, options: [], animations: {
                     self.tapView.alpha = 1
                     }, completion: {
                         (value: Bool) in
@@ -134,22 +134,22 @@ class OnBoardingViewController: UIViewController {
         tapView.imageView.image = UIImage(named: "tapMock")
         tapView.alpha = 0
     
-        let leftSwipe = UISwipeGestureRecognizer(target: self, action: "leftTapSwipe:")
-        leftSwipe.direction = .Left
+        let leftSwipe = UISwipeGestureRecognizer(target: self, action: #selector(OnBoardingViewController.leftTapSwipe(_:)))
+        leftSwipe.direction = .left
         tapView.addGestureRecognizer(leftSwipe)
         
-        let rightSwipe = UISwipeGestureRecognizer(target: self, action: "rightTapSwipe:")
-        rightSwipe.direction = .Right
+        let rightSwipe = UISwipeGestureRecognizer(target: self, action: #selector(OnBoardingViewController.rightTapSwipe(_:)))
+        rightSwipe.direction = .right
         tapView.addGestureRecognizer(rightSwipe)
         
         view.addSubview(tapView)
-        view.bringSubviewToFront(pageDots)
+        view.bringSubview(toFront: pageDots)
     }
     
-    func leftTapSwipe(sender: UISwipeGestureRecognizer) {
+    func leftTapSwipe(_ sender: UISwipeGestureRecognizer) {
         self.view.layer.removeAllAnimations()
         
-        UIView.animateWithDuration(0.4, delay: 0, options: [], animations: {
+        UIView.animate(withDuration: 0.4, delay: 0, options: [], animations: {
             self.tapView.frame.origin.x -= self.tapView.frame.width
             }, completion: {
                 (value: Bool) in
@@ -158,7 +158,7 @@ class OnBoardingViewController: UIViewController {
                 self.tapView.removeFromSuperview()
                 self.setGoalViewConfig()
                 
-                UIView.animateWithDuration(0.4, delay: 0, options: [], animations: {
+                UIView.animate(withDuration: 0.4, delay: 0, options: [], animations: {
                     self.setGoalView.alpha = 1
                     }, completion: {
                         (value: Bool) in
@@ -166,10 +166,10 @@ class OnBoardingViewController: UIViewController {
         })
     }
     
-    func rightTapSwipe(sender: UISwipeGestureRecognizer) {
+    func rightTapSwipe(_ sender: UISwipeGestureRecognizer) {
         self.view.layer.removeAllAnimations()
         
-        UIView.animateWithDuration(0.4, delay: 0, options: [], animations: {
+        UIView.animate(withDuration: 0.4, delay: 0, options: [], animations: {
             self.tapView.frame.origin.x += self.tapView.frame.width
             }, completion: {
                 (value: Bool) in
@@ -178,7 +178,7 @@ class OnBoardingViewController: UIViewController {
                 self.tapView.removeFromSuperview()
                 self.welcomeViewConfig()
                 
-                UIView.animateWithDuration(0.4, delay: 0, options: [], animations: {
+                UIView.animate(withDuration: 0.4, delay: 0, options: [], animations: {
                     self.animateWelcomeView()
                     }, completion: nil)
         })
@@ -199,22 +199,22 @@ class OnBoardingViewController: UIViewController {
         setGoalView.imageView.image = UIImage(named: "setupMock")
         setGoalView.alpha = 0
         
-        let leftSwipe = UISwipeGestureRecognizer(target: self, action: "leftSetGoalSwipe:")
-        leftSwipe.direction = .Left
+        let leftSwipe = UISwipeGestureRecognizer(target: self, action: #selector(OnBoardingViewController.leftSetGoalSwipe(_:)))
+        leftSwipe.direction = .left
         setGoalView.addGestureRecognizer(leftSwipe)
         
-        let rightSwipe = UISwipeGestureRecognizer(target: self, action: "rightSetGoalSwipe:")
-        rightSwipe.direction = .Right
+        let rightSwipe = UISwipeGestureRecognizer(target: self, action: #selector(OnBoardingViewController.rightSetGoalSwipe(_:)))
+        rightSwipe.direction = .right
         setGoalView.addGestureRecognizer(rightSwipe)
         
         view.addSubview(setGoalView)
-        view.bringSubviewToFront(pageDots)
+        view.bringSubview(toFront: pageDots)
     }
     
-    func leftSetGoalSwipe(sender: UISwipeGestureRecognizer) {
+    func leftSetGoalSwipe(_ sender: UISwipeGestureRecognizer) {
         self.view.layer.removeAllAnimations()
  
-        UIView.animateWithDuration(0.4, delay: 0, options: [], animations: {
+        UIView.animate(withDuration: 0.4, delay: 0, options: [], animations: {
             self.setGoalView.frame.origin.x -= self.setGoalView.frame.width
             }, completion: {
                 (value: Bool) in
@@ -223,7 +223,7 @@ class OnBoardingViewController: UIViewController {
                 self.setGoalView.removeFromSuperview()
                 self.notifyViewConfig()
                 
-                UIView.animateWithDuration(0.4, delay: 0, options: [], animations: {
+                UIView.animate(withDuration: 0.4, delay: 0, options: [], animations: {
                     self.notifyView.alpha = 1
                     }, completion: {
                         (value: Bool) in
@@ -231,10 +231,10 @@ class OnBoardingViewController: UIViewController {
         })
     }
     
-    func rightSetGoalSwipe(sender: UISwipeGestureRecognizer) {
+    func rightSetGoalSwipe(_ sender: UISwipeGestureRecognizer) {
         self.view.layer.removeAllAnimations()
         
-        UIView.animateWithDuration(0.4, delay: 0, options: [], animations: {
+        UIView.animate(withDuration: 0.4, delay: 0, options: [], animations: {
             self.setGoalView.frame.origin.x += self.setGoalView.frame.width
             }, completion: {
                 (value: Bool) in
@@ -243,7 +243,7 @@ class OnBoardingViewController: UIViewController {
                 self.setGoalView.removeFromSuperview()
                 self.tapViewConfig()
                 
-                UIView.animateWithDuration(0.4, delay: 0, options: [], animations: {
+                UIView.animate(withDuration: 0.4, delay: 0, options: [], animations: {
                     self.tapView.alpha = 1
                     }, completion: {
                         (value: Bool) in
@@ -266,22 +266,22 @@ class OnBoardingViewController: UIViewController {
         notifyView.imageView.image = UIImage(named: "notificationsMock")
         notifyView.alpha = 0
     
-        let leftSwipe = UISwipeGestureRecognizer(target: self, action: "leftNotifySwipe:")
-        leftSwipe.direction = .Left
+        let leftSwipe = UISwipeGestureRecognizer(target: self, action: #selector(OnBoardingViewController.leftNotifySwipe(_:)))
+        leftSwipe.direction = .left
         notifyView.addGestureRecognizer(leftSwipe)
         
-        let rightSwipe = UISwipeGestureRecognizer(target: self, action: "rightNotifySwipe:")
-        rightSwipe.direction = .Right
+        let rightSwipe = UISwipeGestureRecognizer(target: self, action: #selector(OnBoardingViewController.rightNotifySwipe(_:)))
+        rightSwipe.direction = .right
         notifyView.addGestureRecognizer(rightSwipe)
         
         view.addSubview(notifyView)
-        view.bringSubviewToFront(pageDots)
+        view.bringSubview(toFront: pageDots)
     }
     
-    func leftNotifySwipe(sender: UISwipeGestureRecognizer) {
+    func leftNotifySwipe(_ sender: UISwipeGestureRecognizer) {
         self.view.layer.removeAllAnimations()
         
-        UIView.animateWithDuration(0.4, delay: 0, options: [], animations: {
+        UIView.animate(withDuration: 0.4, delay: 0, options: [], animations: {
             self.notifyView.frame.origin.x -= self.notifyView.frame.width
             self.pageDots.alpha = 0
             }, completion: {
@@ -291,7 +291,7 @@ class OnBoardingViewController: UIViewController {
                 self.notifyView.removeFromSuperview()
                 self.badgeViewConfig()
                 
-                UIView.animateWithDuration(0.4, delay: 0, options: [], animations: {
+                UIView.animate(withDuration: 0.4, delay: 0, options: [], animations: {
                     self.badgeView.alpha = 1
                     }, completion: {
                         (value: Bool) in
@@ -299,10 +299,10 @@ class OnBoardingViewController: UIViewController {
         })
     }
     
-    func rightNotifySwipe(sender: UISwipeGestureRecognizer) {
+    func rightNotifySwipe(_ sender: UISwipeGestureRecognizer) {
         self.view.layer.removeAllAnimations()
         
-        UIView.animateWithDuration(0.4, delay: 0, options: [], animations: {
+        UIView.animate(withDuration: 0.4, delay: 0, options: [], animations: {
             self.notifyView.frame.origin.x += self.notifyView.frame.width
             }, completion: {
                 (value: Bool) in
@@ -311,7 +311,7 @@ class OnBoardingViewController: UIViewController {
                 self.notifyView.removeFromSuperview()
                 self.setGoalViewConfig()
                 
-                UIView.animateWithDuration(0.4, delay: 0, options: [], animations: {
+                UIView.animate(withDuration: 0.4, delay: 0, options: [], animations: {
                     self.setGoalView.alpha = 1
                     }, completion: {
                         (value: Bool) in
@@ -334,24 +334,24 @@ class OnBoardingViewController: UIViewController {
         badgeView.imageView.image = UIImage(named: "badgeMock")
         badgeView.alpha = 0
         
-        let getStartButton = UIButton(frame: CGRectMake(0, badgeView.frame.height - 120, badgeView.frame.width, 60))
-        getStartButton.setTitle("Get Started", forState: .Normal)
-        getStartButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        let getStartButton = UIButton(frame: CGRect(x: 0, y: badgeView.frame.height - 120, width: badgeView.frame.width, height: 60))
+        getStartButton.setTitle("Get Started", for: UIControlState())
+        getStartButton.setTitleColor(UIColor.white, for: UIControlState())
         getStartButton.titleLabel?.font = UIFont(name: "AvenirNext-bold", size: TITLE_FONT_SIZE)
-        getStartButton.addTarget(self, action: "getStartedPressed:", forControlEvents: .TouchUpInside)
+        getStartButton.addTarget(self, action: #selector(OnBoardingViewController.getStartedPressed(_:)), for: .touchUpInside)
         badgeView.addSubview(getStartButton)
         
-        let rightSwipe = UISwipeGestureRecognizer(target: self, action: "rightBadgeSwipe:")
-        rightSwipe.direction = .Right
+        let rightSwipe = UISwipeGestureRecognizer(target: self, action: #selector(OnBoardingViewController.rightBadgeSwipe(_:)))
+        rightSwipe.direction = .right
         badgeView.addGestureRecognizer(rightSwipe)
         
         view.addSubview(badgeView)
     }
     
-    func rightBadgeSwipe(sender: UISwipeGestureRecognizer) {
+    func rightBadgeSwipe(_ sender: UISwipeGestureRecognizer) {
         self.view.layer.removeAllAnimations()
         
-        UIView.animateWithDuration(0.4, delay: 0, options: [], animations: {
+        UIView.animate(withDuration: 0.4, delay: 0, options: [], animations: {
             self.badgeView.frame.origin.x += self.badgeView.frame.width
             }, completion: {
                 (value: Bool) in
@@ -360,7 +360,7 @@ class OnBoardingViewController: UIViewController {
                 self.badgeView.removeFromSuperview()
                 self.notifyViewConfig()
                 
-                UIView.animateWithDuration(0.4, delay: 0, options: [], animations: {
+                UIView.animate(withDuration: 0.4, delay: 0, options: [], animations: {
                     self.pageDots.alpha = 1
                     self.notifyView.alpha = 1
                     }, completion: {
@@ -369,8 +369,8 @@ class OnBoardingViewController: UIViewController {
         })
     }
     
-    func getStartedPressed(sender: UIButton) {
+    func getStartedPressed(_ sender: UIButton) {
         setOnBoarding(true)
-        dismissViewControllerAnimated(true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
 }

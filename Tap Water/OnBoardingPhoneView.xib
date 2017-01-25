@@ -1,33 +1,37 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="OnBoardingPhoneView" customModule="Tap_Water">
-            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Setup the number of glasses to drink a day and the number of ounces per glass." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="16" translatesAutoresizingMaskIntoConstraints="NO" id="yrR-AM-0hz">
-                    <rect key="frame" x="56" y="60" width="488" height="102"/>
+                    <rect key="frame" x="56" y="60" width="263" height="102"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="102" id="Iwl-xj-hvB"/>
                     </constraints>
                     <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="20"/>
-                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="notificationsMock" translatesAutoresizingMaskIntoConstraints="NO" id="HzB-Zw-h7v">
-                    <rect key="frame" x="-135" y="179" width="870" height="870"/>
+                    <rect key="frame" x="-135" y="179" width="645" height="645"/>
                     <constraints>
                         <constraint firstAttribute="width" secondItem="HzB-Zw-h7v" secondAttribute="height" multiplier="1:1" id="BTY-K9-bPn"/>
                     </constraints>
                 </imageView>
             </subviews>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="HzB-Zw-h7v" firstAttribute="top" secondItem="yrR-AM-0hz" secondAttribute="bottom" constant="17" id="Uyx-5M-gls"/>
                 <constraint firstAttribute="trailing" secondItem="HzB-Zw-h7v" secondAttribute="trailing" constant="-135" id="Xx4-KT-qIJ"/>
@@ -45,6 +49,6 @@
         </view>
     </objects>
     <resources>
-        <image name="notificationsMock" width="2000" height="2000"/>
+        <image name="notificationsMock" width="1000" height="1000"/>
     </resources>
 </document>

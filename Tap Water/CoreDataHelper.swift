@@ -9,6 +9,30 @@
 import Foundation
 import UIKit
 import CoreData
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 @objc(Entity)
 class Entity: NSManagedObject {
@@ -16,7 +40,7 @@ class Entity: NSManagedObject {
 }
 
 func ManagedContext() -> NSManagedObjectContext {
-    let appDelegate = (UIApplication.sharedApplication().delegate as! AppDelegate)
+    let appDelegate = (UIApplication.shared.delegate as! AppDelegate)
     let context = appDelegate.managedObjectContext
     
     return context!
@@ -25,10 +49,10 @@ func ManagedContext() -> NSManagedObjectContext {
 // Onboarding
 
 func hasSeenOnBoarding() -> Bool {
-    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
     let managedContext = appDelegate.managedObjectContext
-    let fetchRequest = NSFetchRequest(entityName:"OnBoard")
-    let fetchedResults = try? managedContext!.executeFetchRequest(fetchRequest)
+    let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName:"OnBoard")
+    let fetchedResults = try? managedContext!.fetch(fetchRequest)
     
     var seen = false
     
@@ -36,7 +60,7 @@ func hasSeenOnBoarding() -> Bool {
         if let results = fetchedResults {
             let current = results[0] as! NSManagedObject
             
-            seen = current.valueForKey("hasSeen") as! Bool
+            seen = current.value(forKey: "hasSeen") as! Bool
         }
     } else {
         setOnBoarding(seen)
@@ -45,11 +69,11 @@ func hasSeenOnBoarding() -> Bool {
     return seen
 }
 
-func setOnBoarding(hasSeen: Bool) {
-    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+func setOnBoarding(_ hasSeen: Bool) {
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
     let managedContext = appDelegate.managedObjectContext
-    let fetchRequest = NSFetchRequest(entityName:"OnBoard")
-    let fetchedResults = try? managedContext!.executeFetchRequest(fetchRequest)
+    let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName:"OnBoard")
+    let fetchedResults = try? managedContext!.fetch(fetchRequest)
     
     if fetchedResults?.count > 0 {
         if let dayResults = fetchedResults {
@@ -64,8 +88,8 @@ func setOnBoarding(hasSeen: Bool) {
             }
         }
     } else {
-        let entity =  NSEntityDescription.entityForName("OnBoard", inManagedObjectContext: managedContext!)
-        let seenObject = NSManagedObject(entity: entity!, insertIntoManagedObjectContext:managedContext)
+        let entity =  NSEntityDescription.entity(forEntityName: "OnBoard", in: managedContext!)
+        let seenObject = NSManagedObject(entity: entity!, insertInto:managedContext)
         
         seenObject.setValue(hasSeen, forKey: "hasSeen")
         
@@ -79,11 +103,11 @@ func setOnBoarding(hasSeen: Bool) {
 
 // Days
 
-func savePastDay(day: Day) {
-    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+func savePastDay(_ day: Day) {
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
     let managedContext = appDelegate.managedObjectContext
-    let entity =  NSEntityDescription.entityForName("PastDays", inManagedObjectContext: managedContext!)
-    let waterObject = NSManagedObject(entity: entity!, insertIntoManagedObjectContext:managedContext)
+    let entity =  NSEntityDescription.entity(forEntityName: "PastDays", in: managedContext!)
+    let waterObject = NSManagedObject(entity: entity!, insertInto:managedContext)
     
     waterObject.setValue(day.todaysDate, forKey: "todaysDate")
     waterObject.setValue(day.totalGlassesDrank, forKey: "totalGlassesDrank")
@@ -97,31 +121,31 @@ func savePastDay(day: Day) {
     }
 }
 
-func getPastSevenDays(date: NSDate) -> NSArray {
-    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+func getPastSevenDays(_ date: Date) -> NSArray {
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
     let managedContext = appDelegate.managedObjectContext
-    let dayFetchRequest = NSFetchRequest(entityName:"PastDays")
+    let dayFetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName:"PastDays")
 
     dayFetchRequest.sortDescriptors = [NSSortDescriptor(key: "todaysDate", ascending: false)]
     dayFetchRequest.fetchLimit = 6
     
-    let dayFetchedResults = try? managedContext!.executeFetchRequest(dayFetchRequest)
+    let dayFetchedResults = try? managedContext!.fetch(dayFetchRequest)
     
     let days: NSMutableArray = [0,0,0,0,0,0,0]
     
     if dayFetchedResults?.count > 0 {
         if let dayResults = dayFetchedResults {
             if dayResults.count == 6 {
-                let reversedResults = dayResults.reverse() as Array
+                let reversedResults = dayResults.reversed() as Array
                 
                 for index in 0..<reversedResults.count {
-                    days.replaceObjectAtIndex(index, withObject: reversedResults[index].valueForKey("totalGlassesDrank") as! Int)
+                    days.replaceObject(at: index, with: (reversedResults[index] as AnyObject).value(forKey: "totalGlassesDrank") as! Int)
                 }
             } else {
                 for index in 0..<dayResults.count {
-                    days.replaceObjectAtIndex((days.count - 2) - index, withObject: dayResults[index].valueForKey("totalGlassesDrank") as! Int)
+                    days.replaceObject(at: (days.count - 2) - index, with: (dayResults[index] as AnyObject).value(forKey: "totalGlassesDrank") as! Int)
                     
-                    print(dayResults[index].valueForKey("todaysDate") as! NSDate)
+                    print((dayResults[index] as AnyObject).value(forKey: "todaysDate") as! Date)
                 }
             }
         }
@@ -130,11 +154,11 @@ func getPastSevenDays(date: NSDate) -> NSArray {
     return days
 }
 
-func SaveCurrentDay(day: Day) {
-    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+func SaveCurrentDay(_ day: Day) {
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
     let managedContext = appDelegate.managedObjectContext
-    let entity =  NSEntityDescription.entityForName("Day", inManagedObjectContext: managedContext!)
-    let todaysWaterObject = NSManagedObject(entity: entity!, insertIntoManagedObjectContext:managedContext)
+    let entity =  NSEntityDescription.entity(forEntityName: "Day", in: managedContext!)
+    let todaysWaterObject = NSManagedObject(entity: entity!, insertInto:managedContext)
     
     todaysWaterObject.setValue(day.todaysDate, forKey: "todaysDate")
     todaysWaterObject.setValue(day.totalGlassesDrank, forKey: "totalGlassesDrank")
@@ -149,25 +173,25 @@ func SaveCurrentDay(day: Day) {
 }
 
 func GetCurrentDay() -> Day {
-    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
     let managedContext = appDelegate.managedObjectContext
-    let dayFetchRequest = NSFetchRequest(entityName:"Day")
-    let dayFetchedResults = try? managedContext!.executeFetchRequest(dayFetchRequest)
+    let dayFetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName:"Day")
+    let dayFetchedResults = try? managedContext!.fetch(dayFetchRequest)
     
-    let day = Day(date: NSDate(), drank: 0, goal: 8, ounces: 8)
+    let day = Day(date: Date(), drank: 0, goal: 8, ounces: 8)
     
     if dayFetchedResults?.count > 0 {
         if let dayResults = dayFetchedResults {
             let currentDay = dayResults[0] as! NSManagedObject
             
-            day.todaysDate = currentDay.valueForKey("todaysDate") as! NSDate
-            day.totalGlassesDrank = currentDay.valueForKey("totalGlassesDrank") as! Int
-            day.totalGlassesGoal = currentDay.valueForKey("totalGlassesGoal") as! Int
-            day.ouncesPerGlass = currentDay.valueForKey("ouncesPerGlass") as! Int
+            day.todaysDate = currentDay.value(forKey: "todaysDate") as! Date
+            day.totalGlassesDrank = currentDay.value(forKey: "totalGlassesDrank") as! Int
+            day.totalGlassesGoal = currentDay.value(forKey: "totalGlassesGoal") as! Int
+            day.ouncesPerGlass = currentDay.value(forKey: "ouncesPerGlass") as! Int
         }
         
-        if (!AreDatesSameDay(day.todaysDate, dateTwo: NSDate())) {
-            let daysDifference = calculateNumberOfDaysDifference(day.todaysDate, dateTwo: NSDate())
+        if (!AreDatesSameDay(day.todaysDate, dateTwo: Date())) {
+            let daysDifference = calculateNumberOfDaysDifference(day.todaysDate, dateTwo: Date())
             
             if daysDifference > 1 {
                 for index in 1...daysDifference-1 {
@@ -179,7 +203,7 @@ func GetCurrentDay() -> Day {
             calculateAverage(CGFloat(day.totalGlassesDrank))
             savePastDay(day)
             day.totalGlassesDrank = 0
-            day.todaysDate = NSDate()
+            day.todaysDate = Date()
             UpdateCurrentDay(day)
         }
     } else {
@@ -189,11 +213,11 @@ func GetCurrentDay() -> Day {
     return day
 }
 
-func UpdateCurrentDay(day: Day) {
-    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+func UpdateCurrentDay(_ day: Day) {
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
     let managedContext = appDelegate.managedObjectContext
-    let dayFetchRequest = NSFetchRequest(entityName:"Day")
-    let dayFetchedResults = try? managedContext!.executeFetchRequest(dayFetchRequest)
+    let dayFetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName:"Day")
+    let dayFetchedResults = try? managedContext!.fetch(dayFetchRequest)
 
     if dayFetchedResults?.count > 0 {
         if let dayResults = dayFetchedResults {
@@ -216,38 +240,38 @@ func UpdateCurrentDay(day: Day) {
     }
 }
 
-func AreDatesSameDay(dateOne: NSDate, dateTwo: NSDate) -> Bool {
-    let flags: NSCalendarUnit = [.Day, .Month, .Year]
-    let calender = NSCalendar.currentCalendar()
-    let compOne: NSDateComponents = calender.components(flags, fromDate: dateOne)
-    let compTwo: NSDateComponents = calender.components(flags, fromDate: dateTwo)
+func AreDatesSameDay(_ dateOne: Date, dateTwo: Date) -> Bool {
+    let flags: NSCalendar.Unit = [.day, .month, .year]
+    let calender = Calendar.current
+    let compOne: DateComponents = (calender as NSCalendar).components(flags, from: dateOne)
+    let compTwo: DateComponents = (calender as NSCalendar).components(flags, from: dateTwo)
     
     return (compOne.day == compTwo.day && compOne.month == compTwo.month && compOne.year == compTwo.year)
 }
 
-func calculateNumberOfDaysDifference(dateOne: NSDate, dateTwo: NSDate) -> Int {
-    let calendar: NSCalendar = NSCalendar.currentCalendar()
-    let flags: NSCalendarUnit = .Day
-    let components = calendar.components(flags, fromDate: dateOne, toDate: dateTwo, options: [])
+func calculateNumberOfDaysDifference(_ dateOne: Date, dateTwo: Date) -> Int {
+    let calendar: Calendar = Calendar.current
+    let flags: NSCalendar.Unit = .day
+    let components = (calendar as NSCalendar).components(flags, from: dateOne, to: dateTwo, options: [])
     
-    return components.day
+    return components.day!
 }
 
-func calculateNextDate(date: NSDate, index: Int) -> NSDate {
-    let dayComponent: NSDateComponents = NSDateComponents()
+func calculateNextDate(_ date: Date, index: Int) -> Date {
+    var dayComponent: DateComponents = DateComponents()
     dayComponent.day = index;
     
-    let calendar: NSCalendar = NSCalendar.currentCalendar()
-    return calendar.dateByAddingComponents(dayComponent, toDate: date, options: [])!
+    let calendar: Calendar = Calendar.current
+    return (calendar as NSCalendar).date(byAdding: dayComponent, to: date, options: [])!
 }
 
 // Settings
 
-func SetSettingsAttribute(entityName: NSString, key: NSString, value: Bool) {
-    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+func SetSettingsAttribute(_ entityName: NSString, key: NSString, value: Bool) {
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
     let managedContext = appDelegate.managedObjectContext
-    let entity =  NSEntityDescription.entityForName(entityName as String, inManagedObjectContext: managedContext!)
-    let object = NSManagedObject(entity: entity!, insertIntoManagedObjectContext: managedContext)
+    let entity =  NSEntityDescription.entity(forEntityName: entityName as String, in: managedContext!)
+    let object = NSManagedObject(entity: entity!, insertInto: managedContext)
     
     object.setValue(value, forKey: key as String)
     
@@ -258,11 +282,11 @@ func SetSettingsAttribute(entityName: NSString, key: NSString, value: Bool) {
     }
 }
 
-func UpdateSettingsAttribute(entityName: NSString, key: NSString, value: Bool) {
-    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+func UpdateSettingsAttribute(_ entityName: NSString, key: NSString, value: Bool) {
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
     let managedContext = appDelegate.managedObjectContext
-    let fetchRequest = NSFetchRequest(entityName: entityName as String)
-    let fetchedResults = try? managedContext!.executeFetchRequest(fetchRequest)
+    let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entityName as String)
+    let fetchedResults = try? managedContext!.fetch(fetchRequest)
     
     if fetchedResults?.count > 0 {
         if let results = fetchedResults {
@@ -281,11 +305,11 @@ func UpdateSettingsAttribute(entityName: NSString, key: NSString, value: Bool) {
     }
 }
 
-func GetSettingsAttribute(entityName: NSString, key: NSString) -> Bool {
-    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+func GetSettingsAttribute(_ entityName: NSString, key: NSString) -> Bool {
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
     let managedContext = appDelegate.managedObjectContext
-    let fetchRequest = NSFetchRequest(entityName: entityName as String)
-    let fetchedResults = try? managedContext!.executeFetchRequest(fetchRequest)
+    let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entityName as String)
+    let fetchedResults = try? managedContext!.fetch(fetchRequest)
     
     var value = true
     
@@ -293,7 +317,7 @@ func GetSettingsAttribute(entityName: NSString, key: NSString) -> Bool {
         if let results = fetchedResults {
             let current = results[0] as! NSManagedObject
             
-            value = current.valueForKey(key as String) as! Bool
+            value = current.value(forKey: key as String) as! Bool
         }
     } else {
         SetSettingsAttribute(entityName, key: key, value: value)
@@ -304,16 +328,16 @@ func GetSettingsAttribute(entityName: NSString, key: NSString) -> Bool {
 
 // Notifications
 
-func SaveNotifications(notifications: NSArray) {
-    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+func SaveNotifications(_ notifications: NSArray) {
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
     let managedContext = appDelegate.managedObjectContext
-    let fetchRequest = NSFetchRequest(entityName:"Notifications")
-    let fetchedResults = try? managedContext!.executeFetchRequest(fetchRequest)
+    let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName:"Notifications")
+    let fetchedResults = try? managedContext!.fetch(fetchRequest)
     
     if fetchedResults?.count > 0 {
         if let results = fetchedResults {
             for current in 0..<results.count {
-                managedContext!.deleteObject(results[current] as! NSManagedObject)
+                managedContext!.delete(results[current] as! NSManagedObject)
                 
                 do {
                     try managedContext!.save()
@@ -322,10 +346,10 @@ func SaveNotifications(notifications: NSArray) {
                 }
             }
             
-            let entity =  NSEntityDescription.entityForName("Notifications", inManagedObjectContext: managedContext!)
+            let entity =  NSEntityDescription.entity(forEntityName: "Notifications", in: managedContext!)
             
             for note in 0..<notifications.count {
-                let notificationObject = NSManagedObject(entity: entity!, insertIntoManagedObjectContext:managedContext)
+                let notificationObject = NSManagedObject(entity: entity!, insertInto:managedContext)
                 notificationObject.setValue(notifications[note], forKey: "date")
                 
                 do {
@@ -336,10 +360,10 @@ func SaveNotifications(notifications: NSArray) {
             }  
         }
     } else {
-        let entity =  NSEntityDescription.entityForName("Notifications", inManagedObjectContext: managedContext!)
+        let entity =  NSEntityDescription.entity(forEntityName: "Notifications", in: managedContext!)
         
         for note in 0..<notifications.count {
-            let notificationObject = NSManagedObject(entity: entity!, insertIntoManagedObjectContext:managedContext)
+            let notificationObject = NSManagedObject(entity: entity!, insertInto:managedContext)
             notificationObject.setValue(notifications[note], forKey: "date")
             
             do {
@@ -351,18 +375,18 @@ func SaveNotifications(notifications: NSArray) {
     }    
 }
 
-func GetNotifications(hours: NSMutableArray) -> NSMutableArray {
-    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+func GetNotifications(_ hours: NSMutableArray) -> NSMutableArray {
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
     let managedContext = appDelegate.managedObjectContext
-    let fetchRequest = NSFetchRequest(entityName:"Notifications")
-    let fetchedResults = try? managedContext!.executeFetchRequest(fetchRequest)
+    let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName:"Notifications")
+    let fetchedResults = try? managedContext!.fetch(fetchRequest)
     
     if fetchedResults?.count > 0 {
         if let results = fetchedResults {
             hours.removeAllObjects()
             
             for current in 0..<results.count {
-                hours.addObject(results[current].valueForKey("date") as! NSDate)
+                hours.add((results[current] as AnyObject).value(forKey: "date") as! Date)
             }
         }
     } else {
@@ -372,45 +396,45 @@ func GetNotifications(hours: NSMutableArray) -> NSMutableArray {
     return hours
 }
 
-func ScheduleNotifications(value: Bool) {
-    UIApplication.sharedApplication().cancelAllLocalNotifications()
+func ScheduleNotifications(_ value: Bool) {
+    UIApplication.shared.cancelAllLocalNotifications()
     
     if value {
         let dates = GetNotifications([])
         
         for i in 0 ..< dates.count {
-            let currentDate = NSDate()
+            let currentDate = Date()
             let date = dates[i]
-            let comp = NSCalendar.currentCalendar().components([.Hour, .Minute, .Second], fromDate: date as! NSDate)
-            let fireDate = NSCalendar.currentCalendar()
-                .dateBySettingHour(comp.hour, minute: comp.minute, second: comp.second, ofDate: currentDate, options: [])
+            let comp = (Calendar.current as NSCalendar).components([.hour, .minute, .second], from: date as! Date)
+            let fireDate = (Calendar.current as NSCalendar)
+                .date(bySettingHour: comp.hour!, minute: comp.minute!, second: comp.second!, of: currentDate, options: [])
             let localNotification = UILocalNotification()
             
             localNotification.fireDate = fireDate
             localNotification.alertBody = "Time to drink some water!"
-            localNotification.timeZone = NSTimeZone.defaultTimeZone()
-            localNotification.repeatInterval = NSCalendarUnit.Day
+            localNotification.timeZone = TimeZone.current
+            localNotification.repeatInterval = NSCalendar.Unit.day
             localNotification.category = "addglasscat"
             
-            UIApplication.sharedApplication().scheduleLocalNotification(localNotification)
+            UIApplication.shared.scheduleLocalNotification(localNotification)
         }
     }
 }
 
 // Average
 
-func calculateAverage(newAmount: CGFloat) {
-    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+func calculateAverage(_ newAmount: CGFloat) {
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
     let managedContext = appDelegate.managedObjectContext
     
-    let fetchRequest = NSFetchRequest(entityName:"CurrentAverage")
-    let fetchedResults = try? managedContext!.executeFetchRequest(fetchRequest)
+    let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName:"CurrentAverage")
+    let fetchedResults = try? managedContext!.fetch(fetchRequest)
     
     if fetchedResults?.count > 0 {
         if let results = fetchedResults {
             let current = results[0] as! NSManagedObject
             
-            var value = current.valueForKey("average") as! CGFloat
+            var value = current.value(forKey: "average") as! CGFloat
             
             value = (value + newAmount) / 2
             current.setValue(value, forKey: "average")
@@ -422,8 +446,8 @@ func calculateAverage(newAmount: CGFloat) {
             }
         }
     } else {
-        let entity =  NSEntityDescription.entityForName("CurrentAverage", inManagedObjectContext: managedContext!)
-        let averageObject = NSManagedObject(entity: entity!, insertIntoManagedObjectContext:managedContext)
+        let entity =  NSEntityDescription.entity(forEntityName: "CurrentAverage", in: managedContext!)
+        let averageObject = NSManagedObject(entity: entity!, insertInto:managedContext)
         
         averageObject.setValue(newAmount, forKey: "average")
         
@@ -436,10 +460,10 @@ func calculateAverage(newAmount: CGFloat) {
 }
 
 func getAverage() -> CGFloat {
-    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
     let managedContext = appDelegate.managedObjectContext
-    let fetchRequest = NSFetchRequest(entityName:"CurrentAverage")
-    let fetchedResults = try? managedContext!.executeFetchRequest(fetchRequest)
+    let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName:"CurrentAverage")
+    let fetchedResults = try? managedContext!.fetch(fetchRequest)
     
     var value: CGFloat = 0.0
     
@@ -447,7 +471,7 @@ func getAverage() -> CGFloat {
         if let results = fetchedResults {
             let current = results[0] as! NSManagedObject
             
-            value = current.valueForKey("average") as! CGFloat
+            value = current.value(forKey: "average") as! CGFloat
         }
     }
     

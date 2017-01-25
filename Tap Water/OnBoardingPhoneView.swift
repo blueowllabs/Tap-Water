@@ -14,6 +14,6 @@ class OnBoardingPhoneView: UIView {
     @IBOutlet weak var imageView: UIImageView!
     
     class func instanceFromNib() -> OnBoardingPhoneView {
-        return UINib(nibName: "OnBoardingPhoneView", bundle: nil).instantiateWithOwner(nil, options: nil)[0] as! OnBoardingPhoneView
+        return UINib(nibName: "OnBoardingPhoneView", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! OnBoardingPhoneView
     }
 }

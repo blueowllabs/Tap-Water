@@ -7,6 +7,30 @@
 //
 
 import UIKit
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 extension CGFloat {
     var isInteger: Bool {return rint(self) == self}
@@ -29,9 +53,9 @@ class StatsViewController: UIViewController {
         // Do any additional setup after loading the view.
         let backbutton = UIBarButtonItem(
             image: UIImage(named: "back"),
-            style: .Plain,
+            style: .plain,
             target: self,
-            action: "goBack")
+            action: #selector(StatsViewController.goBack))
         
         navigationItem.leftBarButtonItem = backbutton
         
@@ -45,7 +69,7 @@ class StatsViewController: UIViewController {
         }
     }
 
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         SetupHelperView()
         SetupWaterView()
         
@@ -64,45 +88,45 @@ class StatsViewController: UIViewController {
     }
     
     func goBack() {
-        navigationController?.popViewControllerAnimated(true)
+        navigationController?.popViewController(animated: true)
     }
     
     func SetupHelperView() {
         helper = UIView(
-            frame: CGRectMake(
-                0,
-                goalGlass.bounds.height + goalGlass.frame.origin.y,
-                view.frame.width,
-                goalGlass.bounds.height
+            frame: CGRect(
+                x: 0,
+                y: goalGlass.bounds.height + goalGlass.frame.origin.y,
+                width: view.frame.width,
+                height: goalGlass.bounds.height
             ))
         
-        helper.backgroundColor = .whiteColor()
+        helper.backgroundColor = .white
         view.addSubview(helper)
-        view.bringSubviewToFront(last7DyasLabel)
-        view.bringSubviewToFront(graphView)
+        view.bringSubview(toFront: last7DyasLabel)
+        view.bringSubview(toFront: graphView)
     }
     
     func SetupWaterView() {
         waterView = UIView(
-            frame: CGRectMake(
-                goalGlass.frame.origin.x,
-                goalGlass.bounds.height + goalGlass.frame.origin.y,
-                goalGlass.bounds.width,
-                goalGlass.bounds.height))
+            frame: CGRect(
+                x: goalGlass.frame.origin.x,
+                y: goalGlass.bounds.height + goalGlass.frame.origin.y,
+                width: goalGlass.bounds.width,
+                height: goalGlass.bounds.height))
         waterView.backgroundColor = UIColorFromHex(0x1EA8FC)
         waterView.tag = 1
         
         view.addSubview(waterView)
-        view.sendSubviewToBack(waterView)
+        view.sendSubview(toBack: waterView)
     }
 
-    func AnimateWater(amount: CGFloat) {
+    func AnimateWater(_ amount: CGFloat) {
         let glassHeight = goalGlass.frame.height
         let numberOfPoints = day.totalGlassesGoal
-        let heightOfSingleGlass = glassHeight / CGFloat(numberOfPoints)
+        let heightOfSingleGlass = glassHeight / CGFloat(numberOfPoints!)
         let waterHeight: CGFloat = CGFloat(heightOfSingleGlass * CGFloat(amount))
         
-        UIView.animateWithDuration(1.0, animations: {
+        UIView.animate(withDuration: 1.0, animations: {
             self.waterView.frame.origin.y -= waterHeight
         })
     }

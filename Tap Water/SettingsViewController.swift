@@ -13,7 +13,7 @@ enum AddSubtract {
     case addOunce, subtractOunce
 }
 
-func calculateTotalOunces(numberOfGlasses: Int, ouncesPerGlass: Int) -> Int {
+func calculateTotalOunces(_ numberOfGlasses: Int, ouncesPerGlass: Int) -> Int {
     return numberOfGlasses * ouncesPerGlass
 }
 
@@ -42,9 +42,9 @@ class SettingsViewController: UIViewController, UIGestureRecognizerDelegate {
         // Do any additional setup after loading the view.
         let backbutton = UIBarButtonItem(
             image: UIImage(named: "back"),
-            style: .Plain,
+            style: .plain,
             target: self,
-            action: "goBack")
+            action: #selector(SettingsViewController.goBack))
         
         navigationItem.leftBarButtonItem = backbutton
         
@@ -65,21 +65,21 @@ class SettingsViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     func goBack() {
-        navigationController?.popViewControllerAnimated(true)
+        navigationController?.popViewController(animated: true)
     }
     
     @IBAction func resetDailyGlass() {
         let alert = UIAlertController(
             title: "",
             message: "Are you sure? This will reset the current water level to 0.",
-            preferredStyle: .Alert)
+            preferredStyle: .alert)
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (action) in }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action) in }
         alert.addAction(cancelAction)
         
-        let resetAction = UIAlertAction(title: "Reset", style: .Destructive) { (action) in
+        let resetAction = UIAlertAction(title: "Reset", style: .destructive) { (action) in
             self.day.totalGlassesDrank = 0
-            self.day.todaysDate = NSDate()
+            self.day.todaysDate = Date()
             self.day.totalGlassesGoal = self.dailyGlassGoal
             self.day.ouncesPerGlass = self.ouncesPerGlass
             UpdateCurrentDay(self.day)
@@ -87,40 +87,40 @@ class SettingsViewController: UIViewController, UIGestureRecognizerDelegate {
         }
         alert.addAction(resetAction)
         
-        self.presentViewController(alert, animated: true) { }
+        self.present(alert, animated: true) { }
     }
     
     @IBAction func goToNotificationsViewController() {
-        performSegueWithIdentifier("showNotifications", sender: self)
+        performSegue(withIdentifier: "showNotifications", sender: self)
     }
     
     @IBAction func goToStatsViewController() {
-        performSegueWithIdentifier("showStats", sender: self)
+        performSegue(withIdentifier: "showStats", sender: self)
     }
     
-    @IBAction func addOrSubtractPressed(sender: UIButton) {
+    @IBAction func addOrSubtractPressed(_ sender: UIButton) {
         switch sender.tag {
         case 0:
             if dailyGlassGoal > 1 {
-                dailyGlassGoal--
+                dailyGlassGoal -= 1
                 configureDailyGlassGoalLabel()
             }
             break
         case 1:
             if dailyGlassGoal < 20 {
-                dailyGlassGoal++
+                dailyGlassGoal += 1
                 configureDailyGlassGoalLabel()
             }
             break
         case 2:
             if ouncesPerGlass < 64 {
-                ouncesPerGlass++
+                ouncesPerGlass += 1
                 configureOuncesPerGlassLabel()
             }
             break
         case 3:
             if ouncesPerGlass > 2 {
-                ouncesPerGlass--
+                ouncesPerGlass -= 1
                 configureOuncesPerGlassLabel()
             }
             break
@@ -138,23 +138,23 @@ class SettingsViewController: UIViewController, UIGestureRecognizerDelegate {
     
     func paintAddAndSubtractButtons() {
         var addGlass = UIImage(named: "add")
-        addGlass = addGlass!.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
-        addGlassButton.setImage(addGlass, forState: .Normal)
+        addGlass = addGlass!.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
+        addGlassButton.setImage(addGlass, for: UIControlState())
         addGlassButton.imageView?.tintColor = UIColorFromHex(0x0496f1)
         
         var addOunce = UIImage(named: "add")
-        addOunce = addOunce!.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
-        addOuncesButton.setImage(addOunce, forState: .Normal)
+        addOunce = addOunce!.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
+        addOuncesButton.setImage(addOunce, for: UIControlState())
         addOuncesButton.imageView?.tintColor = UIColorFromHex(0x0496f1)
         
         var subGlass = UIImage(named: "subtract")
-        subGlass = subGlass!.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
-        subGlassButton.setImage(subGlass, forState: .Normal)
+        subGlass = subGlass!.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
+        subGlassButton.setImage(subGlass, for: UIControlState())
         subGlassButton.imageView?.tintColor = UIColorFromHex(0x0496f1)
         
         var subOunce = UIImage(named: "subtract")
-        subOunce = subOunce!.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
-        subOuncesButton.setImage(subOunce, forState: .Normal)
+        subOunce = subOunce!.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
+        subOuncesButton.setImage(subOunce, for: UIControlState())
         subOuncesButton.imageView?.tintColor = UIColorFromHex(0x0496f1)
     }
     
@@ -172,12 +172,12 @@ class SettingsViewController: UIViewController, UIGestureRecognizerDelegate {
     
     // MARK: - Navigation
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showNotifications" {
-            let notificationsVC = segue.destinationViewController as! NotificationsViewController
+            let notificationsVC = segue.destination as! NotificationsViewController
             notificationsVC.day = day
         } else if segue.identifier == "showStats" {
-            let statsVC = segue.destinationViewController as! StatsViewController
+            let statsVC = segue.destination as! StatsViewController
             statsVC.day = day
         }
     }

@@ -10,18 +10,18 @@ import UIKit
 
 let NotiticationCellId = "notificationCell"
 
-func calculateNotificationTimes(dailyGlassGoal: Int) -> NSMutableArray {
+func calculateNotificationTimes(_ dailyGlassGoal: Int) -> NSMutableArray {
     let numberToSchedule = dailyGlassGoal
     let notificationTimes: NSMutableArray = []
     let offset = numberToSchedule > 7 ? 1 : 2
     
-    var fireDate = NSCalendar.currentCalendar()
-        .dateBySettingHour(8, minute: 0, second: 0, ofDate: NSDate(), options: [])
+    var fireDate = (Calendar.current as NSCalendar)
+        .date(bySettingHour: 8, minute: 0, second: 0, of: Date(), options: [])
     
     for _ in 0..<numberToSchedule {
-        notificationTimes.addObject(fireDate!)
-        fireDate = NSCalendar.currentCalendar()
-            .dateByAddingUnit(.Hour, value: offset, toDate: fireDate!, options: [])
+        notificationTimes.add(fireDate!)
+        fireDate = (Calendar.current as NSCalendar)
+            .date(byAdding: .hour, value: offset, to: fireDate!, options: [])
     }
     
     return notificationTimes
@@ -52,7 +52,7 @@ class NotificationsViewController: UIViewController, UITableViewDataSource, UITa
         // Do any additional setup after loading the view.
         let backbutton = UIBarButtonItem(
             image: UIImage(named: "back"),
-            style: .Plain,
+            style: .plain,
             target: self,
             action: #selector(NotificationsViewController.goBack))
         
@@ -64,17 +64,17 @@ class NotificationsViewController: UIViewController, UITableViewDataSource, UITa
         
         if GetSettingsAttribute(Notification, key: NotificationKey) {
             enableSwitch.setOn(true, animated: true)
-            notificationTableView.hidden = false
+            notificationTableView.isHidden = false
             displayAddButton()
         } else {
             enableSwitch.setOn(false, animated: true)
-            notificationTableView.hidden = true
+            notificationTableView.isHidden = true
             navigationItem.rightBarButtonItem = nil
         }
 
         enableSwitch.addTarget(self, action: #selector(NotificationsViewController.stateChanged(_:)),
-                               forControlEvents: UIControlEvents.ValueChanged)
-        notificationTableView.separatorColor = UIColor.clearColor()
+                               for: UIControlEvents.valueChanged)
+        notificationTableView.separatorColor = UIColor.clear
     }
 
     override func didReceiveMemoryWarning() {
@@ -83,7 +83,7 @@ class NotificationsViewController: UIViewController, UITableViewDataSource, UITa
     }
     
     func goBack() {
-        navigationController?.popViewControllerAnimated(true)
+        navigationController?.popViewController(animated: true)
     }
     
     func configureNotifications() {
@@ -91,27 +91,27 @@ class NotificationsViewController: UIViewController, UITableViewDataSource, UITa
         
         for index in 0..<times.count {
             let time = times[index]
-            let formatter = NSDateFormatter()
-            formatter.timeStyle = .ShortStyle
+            let formatter = DateFormatter()
+            formatter.timeStyle = .short
             
-            let dateString = formatter.stringFromDate(time as! NSDate)
-            timeStrings.addObject(dateString)
+            let dateString = formatter.string(from: time as! Date)
+            timeStrings.add(dateString)
         }
     }
     
-    func stateChanged(switchState: UISwitch) {
-        if switchState.on {
+    func stateChanged(_ switchState: UISwitch) {
+        if switchState.isOn {
             UpdateSettingsAttribute(Notification, key: NotificationKey, value: true)
-            notificationTableView.hidden = false
+            notificationTableView.isHidden = false
             displayAddButton()
             
-            UIApplication.sharedApplication().registerUserNotificationSettings(UIUserNotificationSettings(
-                forTypes: [.Alert, .Badge],
+            UIApplication.shared.registerUserNotificationSettings(UIUserNotificationSettings(
+                types: [.alert, .badge],
                 categories: Set(arrayLiteral: category)))
         } else {
             UpdateSettingsAttribute(Notification, key: NotificationKey, value: false)
             ScheduleNotifications (false);
-            notificationTableView.hidden = true
+            notificationTableView.isHidden = true
             navigationItem.rightBarButtonItem = nil
         }
     }
@@ -119,7 +119,7 @@ class NotificationsViewController: UIViewController, UITableViewDataSource, UITa
     func displayAddButton() {
         let addbutton = UIBarButtonItem(
             image: UIImage(named: "add"),
-            style: .Plain,
+            style: .plain,
             target: self,
             action: #selector(NotificationsViewController.addNotification))
         
@@ -132,63 +132,63 @@ class NotificationsViewController: UIViewController, UITableViewDataSource, UITa
     
     // MARK: - Tableview Data Source
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return timeStrings.count
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 50
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = notificationTableView.dequeueReusableCellWithIdentifier(NotiticationCellId) as UITableViewCell!
-        cell.textLabel?.text = timeStrings[indexPath.row] as? String
-        cell.textLabel?.font = UIFont(name: "AvenirNext-regular", size: 20)!
-        cell.textLabel?.textAlignment = .Center
-        cell.selectionStyle = .None
-        return cell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = notificationTableView.dequeueReusableCell(withIdentifier: NotiticationCellId) as UITableViewCell!
+        cell?.textLabel?.text = timeStrings[indexPath.row] as? String
+        cell?.textLabel?.font = UIFont(name: "AvenirNext-regular", size: 20)!
+        cell?.textLabel?.textAlignment = .center
+        cell?.selectionStyle = .none
+        return cell!
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == UITableViewCellEditingStyle.Delete {
-            times.removeObjectAtIndex(indexPath.row)
-            timeStrings.removeObjectAtIndex(indexPath.row)
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == UITableViewCellEditingStyle.delete {
+            times.removeObject(at: indexPath.row)
+            timeStrings.removeObject(at: indexPath.row)
             SaveNotifications(times)
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+            tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
         }
     }
     
     func createDatePickerViewWithAlertController()
     {
-        let alertController = UIAlertController(title: nil, message: "\n\n\n\n\n\n\n\n\n\n", preferredStyle: UIAlertControllerStyle.ActionSheet)
+        let alertController = UIAlertController(title: nil, message: "\n\n\n\n\n\n\n\n\n\n", preferredStyle: UIAlertControllerStyle.actionSheet)
         
-        let viewDatePicker: UIView = UIView(frame: CGRectMake(0, 0, alertController.view.frame.size.width, 200))
-        viewDatePicker.backgroundColor = UIColor.clearColor()
+        let viewDatePicker: UIView = UIView(frame: CGRect(x: 0, y: 0, width: alertController.view.frame.size.width, height: 200))
+        viewDatePicker.backgroundColor = UIColor.clear
         
-        self.datePicker = UIDatePicker(frame: CGRectMake(0, 0, viewDatePicker.frame.size.width - 20, 200))
-        self.datePicker.datePickerMode = UIDatePickerMode.Time
-        self.datePicker.addTarget(self, action: #selector(NotificationsViewController.datePickerSelected), forControlEvents: UIControlEvents.ValueChanged)
+        self.datePicker = UIDatePicker(frame: CGRect(x: 0, y: 0, width: viewDatePicker.frame.size.width - 20, height: 200))
+        self.datePicker.datePickerMode = UIDatePickerMode.time
+        self.datePicker.addTarget(self, action: #selector(NotificationsViewController.datePickerSelected), for: UIControlEvents.valueChanged)
         
         viewDatePicker.addSubview(self.datePicker)
         
         alertController.view.addSubview(viewDatePicker)
             
-        let OKAction = UIAlertAction(title: "Add", style: .Default)
+        let OKAction = UIAlertAction(title: "Add", style: .default)
         { (action) in }
         alertController.addAction(OKAction)
             
-        let cancelAction = UIAlertAction(title: "Cancel", style: .Destructive) { (action) in }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .destructive) { (action) in }
         alertController.addAction(cancelAction)
         
-        self.presentViewController(alertController, animated: true) { (action) in }
+        self.present(alertController, animated: true) { (action) in }
     }
     
     func datePickerSelected()

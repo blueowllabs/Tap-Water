@@ -12,6 +12,6 @@ class OnBoardingWelcomeView: UIView {
     @IBOutlet weak var title: UILabel!
 
     class func instanceFromNib() -> OnBoardingWelcomeView {
-        return UINib(nibName: "OnBoardingWelcomeView", bundle: nil).instantiateWithOwner(nil, options: nil)[0] as! OnBoardingWelcomeView
+        return UINib(nibName: "OnBoardingWelcomeView", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! OnBoardingWelcomeView
     }
 }

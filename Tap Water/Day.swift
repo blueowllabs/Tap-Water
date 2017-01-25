@@ -9,12 +9,12 @@
 import UIKit
 
 class Day: NSObject {
-    var todaysDate: NSDate!
+    var todaysDate: Date!
     var totalGlassesDrank: Int!
     var totalGlassesGoal: Int!
     var ouncesPerGlass: Int!
     
-    init(date: NSDate, drank: Int, goal: Int, ounces: Int)
+    init(date: Date, drank: Int, goal: Int, ounces: Int)
     {
         todaysDate = date
         totalGlassesDrank = drank
