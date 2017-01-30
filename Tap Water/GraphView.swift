@@ -106,7 +106,8 @@ import UIKit
                 if weekday == 7 {
                     weekday = 0
                 }
-                labelView.text = days[(weekday!-1)]
+                labelView.text = days[(weekday!)]
+                weekday = weekday!-1
                 if weekday! < 0 {
                     weekday = days.count - 1
                 }
